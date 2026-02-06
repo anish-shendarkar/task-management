@@ -22,7 +22,7 @@ export default function MyTasksPage() {
             const token = localStorage.getItem("token");
 
             try {
-                const res = await fetch("http://localhost:3333/user/tasks", {
+                const res = await fetch("http://localhost:3333/api/v1/user/tasks", {
                     headers: {
                         "Authorization": `Bearer ${token}`,
                     },
@@ -48,7 +48,7 @@ export default function MyTasksPage() {
         const token = localStorage.getItem("token");
 
         try {
-            const res = await fetch(`http://localhost:3333/user/tasks/status/${taskId}`, {
+            const res = await fetch(`http://localhost:3333/api/v1/user/tasks/status/${taskId}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -62,7 +62,7 @@ export default function MyTasksPage() {
             }
 
             // Refresh tasks
-            const updatedRes = await fetch("http://localhost:3333/user/tasks", {
+            const updatedRes = await fetch("http://localhost:3333/api/v1/user/tasks", {
                 headers: {
                     "Authorization": `Bearer ${token}`,
                 },

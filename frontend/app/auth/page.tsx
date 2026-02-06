@@ -34,8 +34,8 @@ export default function AuthPage() {
 
         setLoading(true);
         const endpoint = mode === "login"
-            ? "http://localhost:3333/api/login"
-            : "http://localhost:3333/api/signup";
+            ? "http://localhost:3333/api/v1/login"
+            : "http://localhost:3333/api/v1/signup";
 
         const payload = mode === "login"
             ? { email: form.email, password: form.password }

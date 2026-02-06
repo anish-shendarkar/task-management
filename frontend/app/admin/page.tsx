@@ -32,7 +32,7 @@ export default function AdminDashboard() {
 
         try {
             // Fetch users
-            const usersRes = await fetch("http://localhost:3333/admin/allusers", {
+            const usersRes = await fetch("http://localhost:3333/api/v1/admin/allusers", {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -42,7 +42,7 @@ export default function AdminDashboard() {
             setUsers(usersData);
 
             // Fetch tasks
-            const tasksRes = await fetch("http://localhost:3333/admin/tasks", {
+            const tasksRes = await fetch("http://localhost:3333/api/v1/admin/tasks", {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -66,7 +66,7 @@ export default function AdminDashboard() {
         const token = localStorage.getItem("token");
 
         try {
-            await fetch(`http://localhost:3333/admin/task/assign/${assignedTo}`, {
+            await fetch(`http://localhost:3333/api/v1/admin/task/assign/${assignedTo}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -92,7 +92,7 @@ export default function AdminDashboard() {
         if (!confirm("Delete this task?")) return;
 
         try {
-            await fetch(`http://localhost:3333/admin/task/${taskId}`, {
+            await fetch(`http://localhost:3333/api/v1/admin/task/${taskId}`, {
                 method: "DELETE",
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -114,7 +114,7 @@ export default function AdminDashboard() {
 
         try {
             const res = await fetch(
-                `http://localhost:3333/admin/task/${editingTask._id}`,
+                `http://localhost:3333/api/v1/admin/task/${editingTask._id}`,
                 {
                     method: "PATCH",
                     headers: {
