@@ -24,7 +24,6 @@ export class AppController {
       req.body.name,
       req.body.email,
       req.body.password,
-      req.body.role,
     );
     return user;
   }
