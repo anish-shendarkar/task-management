@@ -3,7 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { RoleGuard } from 'src/role.guard';
 import { UserService } from './user.service';
 
-@Controller('user')
+@Controller('api/v1/user')
 @UseGuards(AuthGuard('jwt'), new RoleGuard('user'))
 export class UserController {
     constructor(
