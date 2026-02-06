@@ -3,6 +3,8 @@ import { InjectModel, InjectConnection } from '@nestjs/mongoose';
 import { Model, Connection, Types } from 'mongoose';
 import { Task } from 'src/schemas/task.schema';
 import { User } from 'src/schemas/user.schema';
+import { CreateTaskDto } from './dto/create-task.dto';
+import { UpdateTaskDto } from './dto/update-task.dto';
 
 @Injectable()
 export class AdminService {
@@ -14,8 +16,7 @@ export class AdminService {
 
     async createAndAssignTask(
         userId: string,
-        title: string,
-        description: string
+        createTaskDto: CreateTaskDto
     ): Promise<{ task: Task; user: User }> {
         // Verify user exists first
         const user = await this.userModel.findById(userId);
@@ -25,8 +26,8 @@ export class AdminService {
 
         // Create new task
         const newTask = new this.taskModel({
-            title,
-            description,
+            title: createTaskDto.title,
+            description: createTaskDto.description,
             assignedTo: userId,
         });
         const savedTask = await newTask.save();
@@ -62,26 +63,26 @@ export class AdminService {
 
     async updateTask(
         taskId: string,
-        title?: string,
-        description?: string,
-        assignedTo?: string,
-        status?: string,
+        updateTaskDto: UpdateTaskDto
     ) {
         const updateData: any = {};
 
-        if (title !== undefined) updateData.title = title;
-        if (description !== undefined) updateData.description = description;
+        if (updateTaskDto.title !== undefined) updateData.title = updateTaskDto.title;
+        if (updateTaskDto.description !== undefined) updateData.description = updateTaskDto.description;
 
-        if (assignedTo !== undefined) {
-            updateData.assignedTo = new Types.ObjectId(assignedTo);
+        if (updateTaskDto.assignedTo !== undefined) {
+            const user = await this.userModel.findById(updateTaskDto.assignedTo);
+            if (!user) throw new NotFoundException('Assigned user not found');
+
+            updateData.assignedTo = new Types.ObjectId(updateTaskDto.assignedTo);
         }
 
-        if (status !== undefined) {
+        if (updateTaskDto.status !== undefined) {
             const allowed = ['pending', 'in_progress', 'done'];
-            if (!allowed.includes(status)) {
-                throw new BadRequestException(`Invalid status: ${status}`);
+            if (!allowed.includes(updateTaskDto.status)) {
+                throw new BadRequestException(`Invalid status: ${updateTaskDto.status}`);
             }
-            updateData.status = status;
+            updateData.status = updateTaskDto.status;
         }
 
         const task = await this.taskModel.findByIdAndUpdate(

@@ -2,6 +2,8 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@n
 import { AdminService } from './admin.service';
 import { RoleGuard } from 'src/role.guard';
 import { AuthGuard } from '@nestjs/passport';
+import { CreateTaskDto } from './dto/create-task.dto';
+import { UpdateTaskDto } from './dto/update-task.dto';
 
 @Controller('api/v1/admin')
 @UseGuards(AuthGuard('jwt'), new RoleGuard('admin'))
@@ -13,9 +15,9 @@ export class AdminController {
     @Post('task/assign/:userId')
     async createAndAssignTask(
         @Param('userId') userId: string,
-        @Body() body: any,
+        @Body() createTaskDto: CreateTaskDto,
     ) {
-        return this.adminService.createAndAssignTask(userId, body.title, body.description);
+        return this.adminService.createAndAssignTask(userId, createTaskDto);
     }
 
     @Get('tasks')
@@ -29,8 +31,8 @@ export class AdminController {
     }
 
     @Patch('task/:taskId')
-    async updateTask(@Param('taskId') taskId: string, @Body() body: any) {
-        return this.adminService.updateTask(taskId, body.title, body.description, body.assignedTo, body.status);
+    async updateTask(@Param('taskId') taskId: string, @Body() updateTaskDto: UpdateTaskDto) {
+        return this.adminService.updateTask(taskId, updateTaskDto);
     }
 
     @Delete('task/:taskId')
